@@ -9,7 +9,6 @@ const App = require('../app')
 const { beforeEach, teardown, test } = require('tap')
 const clean = require('mongo-clean')
 const { MongoClient } = require('mongodb')
-const dbName = 'tests'
 require('dotenv').config()
 
 let client;
@@ -22,7 +21,7 @@ beforeEach(async function () {
     });
   }
 
-  await clean(client.db(process.env.TEST_DB_NAME));
+  await clean(client.db(process.env.MONGO_TEST_DB));
 });
 
 teardown(async function () {
@@ -38,7 +37,7 @@ function config () {
   return {
     mongodb: {
       client,
-      database: process.env.TEST_DB_NAME
+      database: process.env.MONGO_TEST_DB
     }
   }
 }
