@@ -11,7 +11,8 @@ class EventService {
   readEvents = async (projectionFields) =>
     await this.dao.readEvents(projectionFields);
 
-  readEventsByFilters = async (filters, projectionFields) => await this.dao.readEventsByFilters(filters, projectionFields)
+  readEventsByFilters = async (filters, projectionFields) =>
+    await this.dao.readEventsByFilters(filters, projectionFields);
 
   readEventById = async (id, projectionFields) => {
     const event = await this.dao.readEventById(id, projectionFields);
@@ -25,11 +26,9 @@ class EventService {
     if (event.endDate) event.endDate = new Date(event.endDate);
 
     const createdEvent = await this.dao.createEvent(event);
-
     if (createdEvent.acknowledged && createdEvent.insertedId) {
       return {
         insertedId: createdEvent.insertedId,
-        message: "Event created successfully.",
       };
     } else throw ResourceNotFoundError();
   };
@@ -40,16 +39,14 @@ class EventService {
 
     const updatedEvent = await this.dao.updateEvent(id, event);
     if (updatedEvent.value && updatedEvent.lastErrorObject.n) {
-      return updatedEvent;
+      return { data: updatedEventvalue };
     } else throw new ResourceNotFoundError();
   };
 
   deleteEvent = async (id) => {
     const deletedEvent = await this.dao.deleteEvent(id);
     if (deletedEvent.acknowledged && deletedEvent.deletedCount) {
-      return {
-        message: "Event deleted successfully.",
-      };
+      return true;
     } else throw new ResourceNotFoundError();
   };
 }

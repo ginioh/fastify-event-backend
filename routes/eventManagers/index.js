@@ -1,24 +1,24 @@
 "use strict";
 
-const EventService = require("./service");
+const EventManagerService = require("./service");
 const {
-  eventSchema,
-  readEventsSchema,
-  readEventByIdSchema,
-  createEventSchema,
-  updateEventSchema,
-  deleteEventSchema,
+  eventManagerSchema,
+  // readEventsSchema,
+  // readEventByIdSchema,
+  // createEventSchema,
+  // updateEventSchema,
+  // deleteEventSchema,
 } = require("./schema");
 const { getProjectionFields } = require("../../util/mongoUtils");
 const FilterUtils = require("../../util/filtersUtils");
 
 module.exports = async function (fastify, opts) {
   // SERVICE
-  const service = new EventService(fastify.mongo);
+  const service = new EventManagerService(fastify.mongo);
 
   fastify.get("/", { schema: readEventsSchema }, async (req, res) => {
-    const projectionFields = getProjectionFields(req.query, eventSchema);
-    const filters = new FilterUtils(req.query, eventSchema);
+    const projectionFields = getProjectionFields(req.query, eventManagerSchema);
+    const filters = new FilterUtils(req.query, eventManagerSchema);
     if (filters.isFilterableQuery()) {
       return await service.readEventsByFilters(filters, projectionFields);
     }
@@ -27,7 +27,7 @@ module.exports = async function (fastify, opts) {
 
   fastify.get("/:id", { schema: readEventByIdSchema }, async (req, res) => {
     const { id } = req.params;
-    const projectionFields = getProjectionFields(req.query, eventSchema);
+    const projectionFields = getProjectionFields(req.query, eventManagerSchema);
     return await service.readEventById(id, projectionFields);
   });
 

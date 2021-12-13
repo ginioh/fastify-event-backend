@@ -1,14 +1,14 @@
-class EventDao {
+class CategoryDao {
   constructor(mongoInstance) {
-    if (!EventDao._instance) {
+    if (!CategoryDao._instance) {
       this.mongo = mongoInstance;
-      this.collection = this.mongo.db.collection("event");
-      EventDao._instance = this;
+      this.collection = this.mongo.db.collection("category");
+      CategoryDao._instance = this;
     }
-    return EventDao._instance;
+    return CategoryDao._instance;
   }
 
-  readEvents = async (projectionFields) => {
+  readCategories = async (projectionFields) => {
     try {
       await this.collection
         .find({}, { projection: projectionFields })
@@ -18,7 +18,7 @@ class EventDao {
     }
   };
 
-  readEventsByFilters = async (filters, projectionFields) => {
+  readCategoriesByFilters = async (filters, projectionFields) => {
     try {
       return await this.collection
         .find({ ...filters.getWhere() }, { projection: projectionFields })
@@ -30,7 +30,7 @@ class EventDao {
     }
   };
 
-  readEventById = async (id, projectionFields) => {
+  readCategoryById = async (id, projectionFields) => {
     try {
       return await this.collection.findOne(
         { _id: this.mongo.ObjectId(id) },
@@ -41,19 +41,19 @@ class EventDao {
     }
   };
 
-  createEvent = async (event) => {
+  createCategory = async (category) => {
     try {
-      return await this.collection.insertOne(event);
+      return await this.collection.insertOne(category);
     } catch (err) {
       throw new Error();
     }
   };
 
-  updateEvent = async (id, event) => {
+  updateCategory = async (id, category) => {
     try {
       return await this.collection.findOneAndUpdate(
         { _id: this.mongo.ObjectId(id) },
-        { $set: { ...event } },
+        { $set: { ...category } },
         { returnDocument: "after" }
       );
     } catch (err) {
@@ -61,7 +61,7 @@ class EventDao {
     }
   };
 
-  deleteEvent = async (id) => {
+  deleteCategory = async (id) => {
     try {
       return await this.collection.deleteOne({ _id: this.mongo.ObjectId(id) });
     } catch (err) {
@@ -70,4 +70,4 @@ class EventDao {
   };
 }
 
-module.exports = EventDao;
+module.exports = CategoryDao;

@@ -6,9 +6,26 @@ const eventSchema = S.object()
   .additionalProperties(false)
   .prop("_id", S.string())
   .prop("title", S.string())
+  .prop("slug", S.string())
   .prop("description", S.string())
+  .prop("featuredImage", S.string())
+  .prop("assets", S.array().items(S.string()))
+  .prop("tags", S.array().items(S.string()))
+  .prop("category", S.string())
   .prop("startDate", S.string().raw({ format: "date-time" }))
-  .prop("endDate", S.string().raw({ format: "date-time" }));
+  .prop("endDate", S.string().raw({ format: "date-time" }))
+  .prop("duration", S.number())
+  .prop("url", S.string())
+  .prop(
+    "location",
+    S.object()
+      .additionalProperties(false)
+      .prop("name", S.string())
+      .prop("lat", S.number())
+      .prop("lng", S.number())
+  )
+  .prop("offline", S.boolean().default(true))
+  .prop("public", S.boolean().default(true));
 
 const tags = ["event"];
 
@@ -20,6 +37,9 @@ const bodyCreateJsonSchema = S.object()
   .additionalProperties(false)
   .prop("title", S.string().required())
   .prop("description", S.string().required())
+  .prop("featuredImage", S.string().required())
+  .prop("assets", S.array().items(S.string()))
+  .prop("category", S.string().required())
   .prop("startDate", S.string().raw({ format: "date-time" }).required())
   .prop("endDate", S.string().raw({ format: "date-time" }).required());
 
@@ -33,9 +53,9 @@ const bodyUpdateJsonSchema = eventSchema.only([
 const readEventsSchema = {
   description: "Read all events",
   params: S.object()
-    .prop("fields", S.string().raw({ nullable: true }))
-    .prop("sort", S.string().raw({ nullable: true }))
-    .prop("limit", S.number().raw({ nullable: true })),
+    .prop("fields", S.string())
+    .prop("sort", S.string())
+    .prop("limit", S.number()),
   tags,
   response: {
     200: S.array().items(eventSchema),
@@ -47,7 +67,7 @@ const readEventByIdSchema = {
   params: S.object()
     .additionalProperties(false)
     .prop("id", S.string().required())
-    .prop("fields", S.string().raw({ nullable: true })),
+    .prop("fields", S.string()),
 };
 
 const createEventSchema = {

@@ -1,14 +1,14 @@
-class EventDao {
+class EventManagerDao {
   constructor(mongoInstance) {
-    if (!EventDao._instance) {
+    if (!EventManagerDao._instance) {
       this.mongo = mongoInstance;
-      this.collection = this.mongo.db.collection("event");
-      EventDao._instance = this;
+      this.collection = this.mongo.db.collection("eventManager");
+      EventManagerDao._instance = this;
     }
-    return EventDao._instance;
+    return EventManagerDao._instance;
   }
 
-  readEvents = async (projectionFields) => {
+  readEventManagers = async (projectionFields) => {
     try {
       await this.collection
         .find({}, { projection: projectionFields })
@@ -18,7 +18,7 @@ class EventDao {
     }
   };
 
-  readEventsByFilters = async (filters, projectionFields) => {
+  readEventManagersByFilters = async (filters, projectionFields) => {
     try {
       return await this.collection
         .find({ ...filters.getWhere() }, { projection: projectionFields })
@@ -30,7 +30,7 @@ class EventDao {
     }
   };
 
-  readEventById = async (id, projectionFields) => {
+  readEventManagerById = async (id, projectionFields) => {
     try {
       return await this.collection.findOne(
         { _id: this.mongo.ObjectId(id) },
@@ -41,19 +41,19 @@ class EventDao {
     }
   };
 
-  createEvent = async (event) => {
+  createEventManager = async (eventManager) => {
     try {
-      return await this.collection.insertOne(event);
+      return await this.collection.insertOne(eventManager);
     } catch (err) {
       throw new Error();
     }
   };
 
-  updateEvent = async (id, event) => {
+  updateEventManager = async (id, eventManager) => {
     try {
       return await this.collection.findOneAndUpdate(
         { _id: this.mongo.ObjectId(id) },
-        { $set: { ...event } },
+        { $set: { ...eventManager } },
         { returnDocument: "after" }
       );
     } catch (err) {
@@ -61,7 +61,7 @@ class EventDao {
     }
   };
 
-  deleteEvent = async (id) => {
+  deleteEventManager = async (id) => {
     try {
       return await this.collection.deleteOne({ _id: this.mongo.ObjectId(id) });
     } catch (err) {
@@ -70,4 +70,4 @@ class EventDao {
   };
 }
 
-module.exports = EventDao;
+module.exports = EventManagerDao;
