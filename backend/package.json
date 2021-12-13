@@ -1,0 +1,39 @@
+{
+  "name": "eugenio-fastify",
+  "version": "1.0.0",
+  "description": "This project was bootstrapped with Fastify-CLI.",
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "tap \"test/**/*.test.js\"",
+    "start": "fastify start -l info app.js",
+    "dev": "fastify start -w -l info -P app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^3.0.0",
+    "fastify-autoload": "^3.3.1",
+    "fastify-cli": "^2.14.0",
+    "fastify-error": "^0.3.1",
+    "fastify-formbody": "^5.2.0",
+    "fastify-http-errors-enhanced": "^3.0.2",
+    "fastify-mongodb": "^4.1.1",
+    "fastify-mongoose": "^0.3.0",
+    "fastify-mongoose-api": "^1.1.10",
+    "fastify-plugin": "^3.0.0",
+    "fastify-sensible": "^3.1.0",
+    "fastify-swagger": "^4.12.6",
+    "fluent-json-schema": "^3.0.1",
+    "i18next": "^21.6.0",
+    "i18next-fs-backend": "^1.1.4",
+    "i18next-http-middleware": "^3.1.4",
+    "mongo-clean": "^2.0.0"
+  },
+  "devDependencies": {
+    "tap": "^15.0.9"
+  }
+}

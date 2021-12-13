@@ -1,0 +1,13 @@
+{
+    "CREATE_EVENT": "Evento creato correttamente.",
+    "UPDATE_EVENT": "Evento aggiornato correttamente.",
+    "DELETE_EVENT": "Evento eliminato correttamente.",
+
+    "CREATE_EVENT_MANAGER": "Organizzatore creato correttamente.",
+    "UPDATE_EVENT_MANAGER": "Organizzatore aggiornato correttamente.",
+    "DELETE_EVENT_MANAGER": "Organizzatore eliminato correttamente.",
+
+    "CREATE_CATEGORY": "Categoria creata correttamente.",
+    "UPDATE_CATEGORY": "Categoria aggiornata correttamente.",
+    "DELETE_CATEGORY": "Categoria eliminata correttamente."
+}
