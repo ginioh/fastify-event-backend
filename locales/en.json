@@ -1,0 +1,5 @@
+{
+    "CREATE_EVENT": "Event created successfully.",
+    "UPDATE_EVENT": "Event updated successfully.",
+    "DELETE_EVENT": "Event deleted successfully."
+}
