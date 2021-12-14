@@ -7,7 +7,7 @@ const {
   updateItemByIdSchema,
 } = require("../../common/schema");
 
-const eventManagerSchema = S.object()
+const promoterSchema = S.object()
   .prop("name", S.string())
   .prop("slug", S.string())
   .prop("description", S.string())
@@ -25,7 +25,7 @@ const bodyCreateJsonSchema = S.object()
   .prop("email", S.string().required())
   .prop("logo", S.string());
 
-const bodyUpdateJsonSchema = eventManagerSchema.only([
+const bodyUpdateJsonSchema = promoterSchema.only([
   "name",
   "slug",
   "description",
@@ -34,19 +34,19 @@ const bodyUpdateJsonSchema = eventManagerSchema.only([
   "logo",
 ]);
 
-const readEventManagersSchema = {
-  description: "Read all event managers.",
+const readPromotersSchema = {
+  description: "Read all promoters.",
   params: S.object()
     .prop("fields", S.string())
     .prop("sort", S.string())
     .prop("limit", S.number()),
   tags,
   response: {
-    200: S.array().items(eventManagerSchema),
+    200: S.array().items(promoterSchema),
   },
 };
 
-const readEventManagerByIdSchema = {
+const readPromoterByIdSchema = {
   tags,
   params: S.object()
     .additionalProperties(false)
@@ -54,21 +54,21 @@ const readEventManagerByIdSchema = {
     .prop("fields", S.string()),
 };
 
-const createEventManagerSchema = createItemSchema(tags, bodyCreateJsonSchema);
+const createPromoterSchema = createItemSchema(tags, bodyCreateJsonSchema);
 
-const updateEventManagerSchema = updateItemByIdSchema(
+const updatePromoterSchema = updateItemByIdSchema(
   tags,
   bodyUpdateJsonSchema,
-  eventManagerSchema
+  promoterSchema
 );
 
-const deleteEventManagerSchema = deleteItemSchema(tags);
+const deletePromoterSchema = deleteItemSchema(tags);
 
 module.exports = {
-  eventManagerSchema,
-  readEventManagersSchema,
-  readEventManagerByIdSchema,
-  createEventManagerSchema,
-  updateEventManagerSchema,
-  deleteEventManagerSchema,
+  promoterSchema,
+  readPromotersSchema,
+  readPromoterByIdSchema,
+  createPromoterSchema,
+  updatePromoterSchema,
+  deletePromoterSchema,
 };

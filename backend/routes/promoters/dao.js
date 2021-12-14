@@ -1,14 +1,14 @@
-class EventManagerDao {
+class PromoterDao {
   constructor(mongoInstance) {
-    if (!EventManagerDao._instance) {
+    if (!PromoterDao._instance) {
       this.mongo = mongoInstance;
-      this.collection = this.mongo.db.collection("eventManager");
-      EventManagerDao._instance = this;
+      this.collection = this.mongo.db.collection("promoter");
+      PromoterDao._instance = this;
     }
-    return EventManagerDao._instance;
+    return PromoterDao._instance;
   }
 
-  readEventManagers = async (projectionFields) => {
+  readPromoters = async (projectionFields) => {
     try {
       return await this.collection
         .find({}, { projection: projectionFields })
@@ -18,7 +18,7 @@ class EventManagerDao {
     }
   };
 
-  readEventManagersByFilters = async (filters, projectionFields) => {
+  readPromotersByFilters = async (filters, projectionFields) => {
     try {
       return await this.collection
         .find({ ...filters.getWhere() }, { projection: projectionFields })
@@ -30,7 +30,7 @@ class EventManagerDao {
     }
   };
 
-  readEventManagerById = async (id, projectionFields) => {
+  readPromoterById = async (id, projectionFields) => {
     try {
       return await this.collection.findOne(
         { _id: this.mongo.ObjectId(id) },
@@ -41,7 +41,7 @@ class EventManagerDao {
     }
   };
 
-  createEventManager = async (eventManager) => {
+  createPromoter = async (eventManager) => {
     try {
       return await this.collection.insertOne(eventManager);
     } catch (err) {
@@ -49,7 +49,7 @@ class EventManagerDao {
     }
   };
 
-  updateEventManager = async (id, eventManager) => {
+  updatePromoter = async (id, eventManager) => {
     try {
       return await this.collection.findOneAndUpdate(
         { _id: this.mongo.ObjectId(id) },
@@ -61,7 +61,7 @@ class EventManagerDao {
     }
   };
 
-  deleteEventManager = async (id) => {
+  deletePromoter = async (id) => {
     try {
       return await this.collection.deleteOne({ _id: this.mongo.ObjectId(id) });
     } catch (err) {
@@ -70,4 +70,4 @@ class EventManagerDao {
   };
 }
 
-module.exports = EventManagerDao;
+module.exports = PromoterDao;

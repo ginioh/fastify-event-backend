@@ -3,9 +3,9 @@
     "UPDATE_EVENT": "Event updated successfully.",
     "DELETE_EVENT": "Event deleted successfully.",
 
-    "CREATE_EVENT_MANAGER": "Event manager created successfully.",
-    "UPDATE_EVENT_MANAGER": "Event manager updated successfully.",
-    "DELETE_EVENT_MANAGER": "Event manager deleted successfully.",
+    "CREATE_PROMOTER": "Promoter created successfully.",
+    "UPDATE_PROMOTER": "Promoter updated successfully.",
+    "DELETE_PROMOTER": "Promoter deleted successfully.",
 
     "CREATE_CATEGORY": "Category created successfully.",
     "UPDATE_CATEGORY": "Category updated successfully.",
