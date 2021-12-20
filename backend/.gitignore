@@ -64,3 +64,5 @@ profile*
 .env
 
 .prettierrc
+
+_backup/

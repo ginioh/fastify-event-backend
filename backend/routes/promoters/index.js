@@ -11,14 +11,23 @@ const {
 } = require("./schema");
 const { getProjectionFields } = require("../../util/mongoUtils");
 const FilterUtils = require("../../util/filtersUtils");
+const { AuthorizationException } = require("../../common/exceptions/auth/AuthorizationException");
+const { ResourceNotFoundException } = require("../../common/exceptions/db/ResourceNotFoundException");
 
 module.exports = async function (fastify, opts) {
-  // SERVICE
-  const service = new PromoterService(fastify.mongo);
+
+  // SERVICE //
+  let service = null;
+  if (fastify.mongoose.promoter) {
+    service = new PromoterService(fastify.mongoose.promoter);
+  } else throw new Error();
+
+  // ROUTES //
 
   fastify.get("/", { schema: readPromotersSchema }, async (req, res) => {
-    const projectionFields = getProjectionFields(req.query, promoterSchema);
-    const filters = new FilterUtils(req.query, promoterSchema);
+    const { query } = req;
+    const projectionFields = getProjectionFields(query, promoterSchema);
+    const filters = new FilterUtils(query, promoterSchema);
     if (filters.isFilterableQuery()) {
       return await service.readPromotersByFilters(filters, projectionFields);
     }
@@ -33,31 +42,47 @@ module.exports = async function (fastify, opts) {
 
   fastify.post("/", { schema: createPromoterSchema }, async (req, res) => {
     const result = await service.createPromoter(req.body);
-    return {
-      ...result,
-      message: req.t('CREATE_PROMOTER')
-    }
+    if (result) {
+      return {
+        item: result,
+        message: req.t('CREATE_PROMOTER')
+      }
+    } else throw fastify.httpErrors.badRequest();
   });
 
   fastify.put("/:id", { schema: updatePromoterSchema }, async (req, res) => {
-    const { id } = req.params;
-    const { title, description, startDate, endDate } = req.body;
-    if (id && (title || description || startDate || endDate)) {
-      const result = await service.updatePromoter(req.params.id, req.body);
-      return {
-        ...result,
-        message: req.t("UPDATE_PROMOTER"),
-      };
+    const { body, params: { id } } = req;
+    if (id) {
+      const result = await service.updatePromoter(id, body);
+      if (result) {
+        return {
+          item: result,
+          message: req.t("UPDATE_PROMOTER"),
+        };
+      } else throw ResourceNotFoundException();
     } else throw fastify.httpErrors.badRequest();
   });
 
   fastify.delete("/:id", { schema: deletePromoterSchema }, async (req, res) => {
     const { id } = req.params;
     const result = await service.deletePromoter(id);
-    if (result) {
-      return {
-        message: req.t("DELETE_PROMOTER"),
-      };
-    }
+    if (result.ok) {
+      if (result.deletedCount) {
+        return {
+          message: req.t("DELETE_PROMOTER"),
+        };
+      } else throw new ResourceNotFoundException();
+    } else throw fastify.httpErrors.badRequest();
   });
-};
+
+  // HOOKS //
+
+  fastify.addHook('onRequest', async function hook(req, res) {
+    try {
+      await fastify.protect(req, res);
+    } catch (err) {
+      throw new AuthorizationException()
+    }
+  })
+}
+

@@ -15,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@keycloak/keycloak-admin-client": "^16.0.0",
     "fastify": "^3.0.0",
     "fastify-autoload": "^3.3.1",
     "fastify-cli": "^2.14.0",
@@ -23,8 +24,9 @@
     "fastify-formbody": "^5.2.0",
     "fastify-http-errors-enhanced": "^3.0.2",
     "fastify-mongodb": "^4.1.1",
-    "fastify-mongoose": "^0.3.0",
     "fastify-mongoose-api": "^1.1.10",
+    "fastify-mongoose-driver": "^3.2.0",
+    "fastify-multipart": "^5.2.1",
     "fastify-plugin": "^3.0.0",
     "fastify-sensible": "^3.1.0",
     "fastify-swagger": "^4.12.6",
@@ -32,7 +34,8 @@
     "i18next": "^21.6.0",
     "i18next-fs-backend": "^1.1.4",
     "i18next-http-middleware": "^3.1.4",
-    "mongo-clean": "^2.0.0"
+    "mongo-clean": "^2.0.0",
+    "openid-client": "^5.1.0"
   },
   "devDependencies": {
     "tap": "^15.0.9"

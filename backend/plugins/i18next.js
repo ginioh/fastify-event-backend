@@ -20,8 +20,10 @@ i18next
     },
   });
 
-module.exports = fp(async (fastify, opts) => {
+const i18nextPlugin = async (fastify, opts) => {
   fastify.register(middleware.plugin, {
     i18next,
-  });
-});
+  })
+}
+
+module.exports = fp(i18nextPlugin, { name: 'i18next' })

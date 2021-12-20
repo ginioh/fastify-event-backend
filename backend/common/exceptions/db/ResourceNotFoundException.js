@@ -1,4 +1,4 @@
-class ResourceNotFoundError extends Error {
+class ResourceNotFoundException extends Error {
     constructor(error) {
         super();
 
@@ -9,5 +9,5 @@ class ResourceNotFoundError extends Error {
 }
 
 module.exports = {
-    ResourceNotFoundError
+    ResourceNotFoundException
 }

@@ -1,6 +1,9 @@
+"use strict";
+
 const {
-  ResourceNotFoundError,
+  ResourceNotFoundException,
 } = require("../../common/exceptions/db/ResourceNotFoundException");
+const { slugify } = require("../../util/functions");
 const EventDao = require("./dao");
 
 class EventService {
@@ -14,41 +17,16 @@ class EventService {
   readEventsByFilters = async (filters, projectionFields) =>
     await this.dao.readEventsByFilters(filters, projectionFields);
 
-  readEventById = async (id, projectionFields) => {
-    const event = await this.dao.readEventById(id, projectionFields);
-    if (event && Object.keys(event).length) {
-      return event;
-    } else throw new ResourceNotFoundError();
-  };
+  readEventById = async (id, projectionFields) => await this.dao.readEventById(id, projectionFields);
 
-  createEvent = async (event) => {
-    if (event.startDate) event.startDate = new Date(event.startDate);
-    if (event.endDate) event.endDate = new Date(event.endDate);
 
-    const createdEvent = await this.dao.createEvent(event);
-    if (createdEvent.acknowledged && createdEvent.insertedId) {
-      return {
-        insertedId: createdEvent.insertedId,
-      };
-    } else throw ResourceNotFoundError();
-  };
+  createEvent = async (event) => await this.dao.createEvent(event);
 
-  updateEvent = async (id, event) => {
-    if (event.startDate) event.startDate = new Date(event.startDate);
-    if (event.endDate) event.endDate = new Date(event.endDate);
 
-    const updatedEvent = await this.dao.updateEvent(id, event);
-    if (updatedEvent.value && updatedEvent.lastErrorObject.n) {
-      return { data: updatedEventvalue };
-    } else throw new ResourceNotFoundError();
-  };
+  updateEvent = async (id, event) => await this.dao.updateEvent(id, event);
 
-  deleteEvent = async (id) => {
-    const deletedEvent = await this.dao.deleteEvent(id);
-    if (deletedEvent.acknowledged && deletedEvent.deletedCount) {
-      return true;
-    } else throw new ResourceNotFoundError();
-  };
+
+  deleteEvent = async (id) => await this.dao.deleteEvent(id);
 }
 
 module.exports = EventService;

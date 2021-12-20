@@ -1,13 +1,16 @@
 "use strict";
 
 const S = require("fluent-json-schema");
-const { createItemSchema, updateItemByIdSchema, deleteItemSchema } = require("../../common/schema");
+const { readItemByIdSchema,
+  readItemsSchema, createItemSchema, updateItemByIdSchema, deleteItemSchema } = require("../../common/schema");
 
 const categorySchema = S.object()
-.prop("name", S.string())
-.prop("slug", S.string())
-.prop("description", S.string())
-.prop("icon", S.string());
+  .additionalProperties(false)
+  .prop("_id", S.string())
+  .prop("name", S.string())
+  .prop("slug", S.string())
+  .prop("description", S.string())
+  .prop("icon", S.string());
 
 const tags = ["eventManager"];
 
@@ -17,39 +20,25 @@ const bodyCreateJsonSchema = S.object()
   .prop("description", S.string())
   .prop("icon", S.string())
 
-const bodyUpdateJsonSchema = categorySchema;
+const bodyUpdateJsonSchema = categorySchema.only([
+  "name", "slug", "description", "icon"
+]);
 
-const readCategoriesSchema = {
-  description: "Read all categories.",
-  params: S.object()
-    .prop("fields", S.string())
-    .prop("sort", S.string())
-    .prop("limit", S.number()),
-  tags,
-  response: {
-    200: S.array().items(categorySchema),
-  },
-};
+const readCategoriesSchema = readItemsSchema("Read all categories.", tags, categorySchema)
 
-const readCategoryByIdSchema = {
-    tags,
-    params: S.object()
-      .additionalProperties(false)
-      .prop("id", S.string().required())
-      .prop("fields", S.string()),
-  };
+const readCategoryByIdSchema = readItemByIdSchema("Read a single existing category, given id.", tags, categorySchema)
 
-  const createCategorySchema = createItemSchema(tags, bodyCreateJsonSchema)
+const createCategorySchema = createItemSchema("Create a new category.", tags, bodyCreateJsonSchema)
 
-  const updateCategorySchema = updateItemByIdSchema(tags, bodyUpdateJsonSchema, categorySchema);
+const updateCategorySchema = updateItemByIdSchema("Update an existing category, given id.", tags, bodyUpdateJsonSchema, categorySchema);
 
-  const deleteCategorySchema = deleteItemSchema(tags);
+const deleteCategorySchema = deleteItemSchema("Delete an existing category.", tags);
 
 module.exports = {
-    categorySchema,
-    readCategoriesSchema,
-    readCategoryByIdSchema,
-    createCategorySchema,
-    updateCategorySchema,
-    deleteCategorySchema,
+  categorySchema,
+  readCategoriesSchema,
+  readCategoryByIdSchema,
+  createCategorySchema,
+  updateCategorySchema,
+  deleteCategorySchema,
 }

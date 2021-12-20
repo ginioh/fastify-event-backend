@@ -4,6 +4,7 @@ class CategoryDao {
   constructor(mongoInstance) {
     if (!CategoryDao._instance) {
       this.mongo = mongoInstance;
+      // this.collection = this.mongo.db.collection("category");
       CategoryDao._instance = this;
     }
     return CategoryDao._instance;
@@ -11,20 +12,21 @@ class CategoryDao {
 
   readCategories = async (projectionFields) => {
     try {
-      return await this.mongo.find({}).select(projectionFields);
+      return await this.collection
+        .find({}, { projection: projectionFields })
+        .toArray();
     } catch (err) {
-      console.log(err)
       throw new Error();
     }
   };
 
   readCategoriesByFilters = async (filters, projectionFields) => {
     try {
-      return await this.mongo
-        .find({ ...filters.getWhere() })
-        .select({ ...projectionFields })
+      return await this.collection
+        .find({ ...filters.getWhere() }, { projection: projectionFields })
         .sort({ ...filters.getSort() })
         .limit(filters.getLimit())
+        .toArray();
     } catch (err) {
       throw new Error();
     }
@@ -32,7 +34,10 @@ class CategoryDao {
 
   readCategoryById = async (id, projectionFields) => {
     try {
-      return await this.mongo.findById(id).select({ ...projectionFields })
+      return await this.collection.findOne(
+        { _id: this.mongo.ObjectId(id) },
+        { projection: projectionFields }
+      );
     } catch (err) {
       throw new Error();
     }
@@ -40,7 +45,7 @@ class CategoryDao {
 
   createCategory = async (category) => {
     try {
-      return await this.mongo.create(category);
+      return await this.collection.insertOne(category);
     } catch (err) {
       throw new Error();
     }
@@ -48,20 +53,19 @@ class CategoryDao {
 
   updateCategory = async (id, category) => {
     try {
-      return await this.mongo.findByIdAndUpdate(
-        id,
-        category,
-        { new: true }
+      return await this.collection.findOneAndUpdate(
+        { _id: this.mongo.ObjectId(id) },
+        { $set: { ...category } },
+        { returnDocument: "after" }
       );
     } catch (err) {
-      console.log(err)
       throw new Error();
     }
   };
 
   deleteCategory = async (id) => {
     try {
-      return await this.mongo.deleteOne({ _id: id });
+      return await this.collection.deleteOne({ _id: this.mongo.ObjectId(id) });
     } catch (err) {
       throw new Error();
     }

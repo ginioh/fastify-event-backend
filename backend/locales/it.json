@@ -1,12 +1,12 @@
 {
+    "NOT_AUTHORIZED": "Non sei autorizzato a richiedere questa risorsa.",
+    "CREATE_ACCOUNT": "Account creato correttamente.",
     "CREATE_EVENT": "Evento creato correttamente.",
     "UPDATE_EVENT": "Evento aggiornato correttamente.",
     "DELETE_EVENT": "Evento eliminato correttamente.",
-
     "CREATE_PROMOTER": "Organizzatore creato correttamente.",
     "UPDATE_PROMOTER": "Organizzatore aggiornato correttamente.",
     "DELETE_PROMOTER": "Organizzatore eliminato correttamente.",
-
     "CREATE_CATEGORY": "Categoria creata correttamente.",
     "UPDATE_CATEGORY": "Categoria aggiornata correttamente.",
     "DELETE_CATEGORY": "Categoria eliminata correttamente."
