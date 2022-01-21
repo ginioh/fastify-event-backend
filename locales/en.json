@@ -1,5 +1,14 @@
 {
+    "NOT_AUTHORIZED": "You are not authorized to get this resource",
+    "CREATE_ACCOUNT": "Account created successfully.",
     "CREATE_EVENT": "Event created successfully.",
     "UPDATE_EVENT": "Event updated successfully.",
-    "DELETE_EVENT": "Event deleted successfully."
+    "DELETE_EVENT": "Event deleted successfully.",
+    "CREATE_PROMOTER": "Promoter created successfully.",
+    "UPDATE_PROMOTER": "Promoter updated successfully.",
+    "DELETE_PROMOTER": "Promoter deleted successfully.",
+    "CREATE_CATEGORY": "Category created successfully.",
+    "UPDATE_CATEGORY": "Category updated successfully.",
+    "DELETE_CATEGORY": "Category deleted successfully.",
+    "FILE_UPLOAD_SUCCESS": "File uploaded successfully"
 }

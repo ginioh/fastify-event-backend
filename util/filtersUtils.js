@@ -4,11 +4,13 @@ class FiltersUtils {
     this.schema = schema;
     this.where = {};
     this.sort = {};
+    this.offset = 0;
     this.limit = 0;
 
     if (Object.keys(queryString).length) {
       this._buildWhere();
       this._buildSort();
+      this._buildOffset();
       this._buildLimit();
     }
   }
@@ -36,6 +38,10 @@ class FiltersUtils {
     }
   };
 
+  _buildOffset = () => {
+    if (this.queryString.offset) this.offset = parseInt(this.queryString.offset);
+  };
+
   _buildLimit = () => {
     if (this.queryString.limit) this.limit = parseInt(this.queryString.limit);
   };
@@ -54,6 +60,7 @@ class FiltersUtils {
   getWhere = () => this.where;
   getSort = () => this.sort;
   getLimit = () => this.limit;
+  getOffset = () => this.offset;
 }
 
 module.exports = FiltersUtils;

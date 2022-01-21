@@ -5,5 +5,5 @@ COPY package.json /usr/src/app/
 RUN npm install
 COPY . /usr/src/app
 EXPOSE 3000
-RUN npm -g install create-fastify-app
+RUN npm -g install fastify-cli
 CMD [ "npm", "run", "start" ]

@@ -1,64 +1,28 @@
 "use strict";
 
-const EventService = require("./service");
-const {
-  eventSchema,
-  readEventsSchema,
-  readEventByIdSchema,
-  createEventSchema,
-  updateEventSchema,
-  deleteEventSchema,
-} = require("./schema");
-const { getProjectionFields } = require("../../util/mongoUtils");
-const FilterUtils = require("../../util/filtersUtils");
+const { readCategoriesSchema, readCategoryByIdSchema, createCategorySchema, updateCategorySchema, deleteCategorySchema } = require("./schema");
+const { readCategories, readCategoryById, createCategory, updateCategory, deleteCategory} = require("./handler");
 
-module.exports = async function (fastify, opts) {
-  // SERVICE
-  const service = new EventService(fastify.mongo);
+module.exports = async (fastify, opts) => {
 
-  fastify.get("/", { schema: readEventsSchema }, async (req, res) => {
-    const projectionFields = getProjectionFields(req.query, eventSchema);
-    const filters = new FilterUtils(req.query, eventSchema);
-    if (filters.isFilterableQuery()) {
-      return await service.readEventsByFilters(filters, projectionFields);
-    }
-    return await service.readEvents(projectionFields);
-  });
+  // SERVICE //
 
-  fastify.get("/:id", { schema: readEventByIdSchema }, async (req, res) => {
-    const { id } = req.params;
-    const projectionFields = getProjectionFields(req.query, eventSchema);
-    return await service.readEventById(id, projectionFields);
-  });
+  // const service = controller(fastify.models.categoryModel);
 
-  fastify.post("/", { schema: createEventSchema }, async (req, res) => {
-    const result = await service.createEvent(req.body);
-    return {
-      ...result,
-      message: req.t('CREATE_EVENT')
-    }
-  });
+  // ROUTES //
 
-  fastify.put("/:id", { schema: updateEventSchema }, async (req, res) => {
-    const { id } = req.params;
-    const { title, description, startDate, endDate } = req.body;
-    console.log(req);
-    if (id && (title || description || startDate || endDate)) {
-      const result = await service.updateEvent(req.params.id, req.body);
-      return {
-        ...result,
-        message: req.t("UPDATE_EVENT"),
-      };
-    } else throw fastify.httpErrors.badRequest();
-  });
+  fastify.get("/", { schema: readCategoriesSchema }, readCategories);
 
-  fastify.delete("/:id", { schema: deleteEventSchema }, async (req, res) => {
-    const { id } = req.params;
-    const result = await service.deleteEvent(id);
-    if (result) {
-      return {
-        message: req.t("DELETE_EVENT"),
-      };
-    }
-  });
+  fastify.get("/:id", { schema: readCategoryByIdSchema }, readCategoryById);
+
+  fastify.post("/", { schema: createCategorySchema }, createCategory);
+
+  fastify.put("/:id", { schema: updateCategorySchema }, updateCategory);
+
+  fastify.delete("/:id", { schema: deleteCategorySchema }, deleteCategory);
+
+  // HOOKS //
+
+  fastify.addHook('onRequest', await fastify.protect)
+
 };

@@ -1,0 +1,9 @@
+{
+    "realm": "eventmanager-react",
+    "realm-public-key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwCuAjln5puB5RXMkQqQCzOthLhHTgdcxogGpq0sepfvrsxY7xb5hZlQEv7KegW28yAvZuoP6Q2nBabl7nbKXoiuYfY5UnJZkIDgr5aFOnGeXcxDwWuCn605xsxTcH9U/lozqylmSaAv/m7cxJyFJztFvMBpkp4r0G7EZNeeK3wgsEcy1pxxZ9QziXPQuNi/ZmjS1cMboTnjAaAd6REUGN1U0fH502hMzlkm58LT9a9eElVFokRqwUBPElzPnulhFIT9LUhUZOTs+9IGt4yQAbTS35omZM/zAsum0aXvulP7Z0RSFPtqPTBRUiXkw+Q2xQZ9AHSsBRUEBkvJ9p+geywIDAQAB",
+    "auth-server-url": "http://localhost:8080",
+    "resource": "nodejs-connect",
+    "public-client": true,
+    "bearerOnly": true,
+    "client_id": "eventmanager-auth"
+}

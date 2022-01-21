@@ -6,6 +6,8 @@ const { build } = require("../helper");
 const fakeEvent = {
   title: "A subject",
   description: "A ticket body",
+  featuredImage: "http://localhost:3000/public/test.png",
+  category: "61af8dc11fe6423fdb9bd653",
   startDate: new Date("2006-08-29T09:12:33.001Z").toISOString(),
   endDate: new Date("2006-08-29T10:12:33.001Z").toISOString(),
 };
@@ -30,7 +32,7 @@ test("Read events with projection fields.", async (t) => {
   const fields = ["title", "description"];
 
   const readEvents = await app.inject({
-    url: "events",
+    url: `events?fields=${fields.join(',')}`,
     method: "GET",
   });
   

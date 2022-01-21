@@ -1,95 +1,46 @@
 "use strict";
 
 const S = require("fluent-json-schema");
+const { readItemByIdSchema, createItemSchema, updateItemByIdSchema, deleteItemSchema, readFilteredItemsSchema } = require("../../common/schema");
 
 const categorySchema = S.object()
-.prop("name", S.string())
-.prop("slug", S.string())
-.prop("description", S.string())
-.prop("icon", S.string());
-
-const tags = ["eventManager"];
-
-const bodyCreateJsonSchema = S.object()
-  .prop("name", S.string().required())
+  .additionalProperties(false)
+  .prop("_id", S.string())
+  .prop("name", S.string())
   .prop("slug", S.string())
   .prop("description", S.string())
-  .prop("website", S.string())
-  .prop("email", S.string().required())
-  .prop("logo", S.string());
+  .prop("icon", S.string());
 
-const bodyUpdateJsonSchema = eventManagerSchema.only([
-  "name",
-  "slug",
-  "description",
-  "website",
-  "email",
-  "logo",
+
+const tags = ["Category"];
+
+const bodyCreateJsonSchema = S.object()
+  .additionalProperties(false)
+  .prop("name", S.string().required())
+  .prop("description", S.string())
+  .prop("icon", S.string().required());
+
+const bodyUpdateJsonSchema = categorySchema.only([
+  "name", "description", "icon"
 ]);
 
-const readCategoriesSchema = {
-  description: "Read all categories.",
-  params: S.object()
-    .prop("fields", S.string())
-    .prop("sort", S.string())
-    .prop("limit", S.number()),
-  tags,
-  response: {
-    200: S.array().items(categorySchema),
-  },
-};
+const queryStringSchema = bodyUpdateJsonSchema.only(["name", "description"]);
 
-const readCategoryByIdSchema = {
-    tags,
-    params: S.object()
-      .additionalProperties(false)
-      .prop("id", S.string().required())
-      .prop("fields", S.string()),
-  };
+const readCategoriesSchema = readFilteredItemsSchema("Read all categories.", tags, queryStringSchema, categorySchema)
 
-  const createCategorySchema = {
-    tags,
-    body: bodyCreateJsonSchema,
-    response: {
-      200: S.object()
-        .additionalProperties(false)
-        .prop("insertedId", S.string())
-        .prop("message", S.string()),
-    },
-  };
+const readCategoryByIdSchema = readItemByIdSchema("Read a single existing category, given id.", tags, queryStringSchema, categorySchema)
 
-  const updateCategorySchema = {
-    tags,
-    params: S.object()
-      .additionalProperties(false)
-      .prop("id", S.string().required()),
-    body: bodyUpdateJsonSchema,
-    response: {
-      200: S.object()
-        .additionalProperties(false)
-        .prop("data", categorySchema)
-        .prop("message", S.string().required()),
-    },
-  };
-  
-  const deleteCategorySchema = {
-    tags,
-    params: S.object()
-      .additionalProperties(false)
-      .prop("id", S.string().required()),
-    response: {
-      200: S.object()
-        .additionalProperties(false)
-        .prop("message", S.string().required()),
-    },
-  };
+const createCategorySchema = createItemSchema("Create a new category.", tags, bodyCreateJsonSchema)
 
+const updateCategorySchema = updateItemByIdSchema("Update an existing category, given id.", tags, bodyUpdateJsonSchema, categorySchema);
+
+const deleteCategorySchema = deleteItemSchema("Delete an existing category.", tags);
 
 module.exports = {
-    categorySchema,
-    readCategoriesSchema,
-    readCategoryByIdSchema,
-    createCategorySchema,
-    updateCategorySchema,
-    deleteCategorySchema,
+  categorySchema,
+  readCategoriesSchema,
+  readCategoryByIdSchema,
+  createCategorySchema,
+  updateCategorySchema,
+  deleteCategorySchema,
 }

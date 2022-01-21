@@ -1,64 +1,38 @@
 "use strict";
 
-const EventService = require("./service");
 const {
-  eventSchema,
   readEventsSchema,
+  readMyEventsSchema,
   readEventByIdSchema,
   createEventSchema,
   updateEventSchema,
   deleteEventSchema,
+  readFilteredEventsSchema
 } = require("./schema");
-const { getProjectionFields } = require("../../util/mongoUtils");
-const FilterUtils = require("../../util/filtersUtils");
+const { readEvents, readPublicEvents, readMyEvents, readEventById, createEvent, updateEvent, deleteEvent } = require("./handler");
 
-module.exports = async function (fastify, opts) {
-  // SERVICE
-  const service = new EventService(fastify.mongo);
+module.exports = async (fastify, opts) => {
 
-  fastify.get("/", { schema: readEventsSchema }, async (req, res) => {
-    const projectionFields = getProjectionFields(req.query, eventSchema);
-    const filters = new FilterUtils(req.query, eventSchema);
-    if (filters.isFilterableQuery()) {
-      return await service.readEventsByFilters(filters, projectionFields);
-    }
-    return await service.readEvents(projectionFields);
-  });
+  // ROUTES //
 
-  fastify.get("/:id", { schema: readEventByIdSchema }, async (req, res) => {
-    const { id } = req.params;
-    const projectionFields = getProjectionFields(req.query, eventSchema);
-    return await service.readEventById(id, projectionFields);
-  });
+  fastify.get("/", { schema: readFilteredEventsSchema, onRequest: async (req, res) => await fastify.authorize(req, res, ['admin']) }, readEvents);
 
-  fastify.post("/", { schema: createEventSchema }, async (req, res) => {
-    const result = await service.createEvent(req.body);
-    return {
-      ...result,
-      message: req.t('CREATE_EVENT')
-    }
-  });
+  fastify.get("/public", { schema: readFilteredEventsSchema }, readPublicEvents)
 
-  fastify.put("/:id", { schema: updateEventSchema }, async (req, res) => {
-    const { id } = req.params;
-    const { title, description, startDate, endDate } = req.body;
-    console.log(req);
-    if (id && (title || description || startDate || endDate)) {
-      const result = await service.updateEvent(req.params.id, req.body);
-      return {
-        ...result,
-        message: req.t("UPDATE_EVENT"),
-      };
-    } else throw fastify.httpErrors.badRequest();
-  });
+  fastify.get("/mine", {
+    schema: readMyEventsSchema, onRequest: fastify.protect
+  }, readMyEvents);
 
-  fastify.delete("/:id", { schema: deleteEventSchema }, async (req, res) => {
-    const { id } = req.params;
-    const result = await service.deleteEvent(id);
-    if (result) {
-      return {
-        message: req.t("DELETE_EVENT"),
-      };
-    }
-  });
+  fastify.get("/:id", { schema: readEventByIdSchema }, readEventById);
+
+  fastify.post("/", { schema: createEventSchema, onRequest: fastify.protect }, createEvent);
+
+  fastify.put("/:id", { schema: updateEventSchema, onRequest: fastify.protect }, updateEvent);
+
+  fastify.delete("/:id", { schema: deleteEventSchema, onRequest: fastify.protect }, deleteEvent);
+
+  // fastify.addHook('onSend', (request, reply, payload, done) => {
+  //   const newPayload = fastify.encrypt(payload);
+  //   done(null, JSON.stringify(newPayload));
+  // })
 };
